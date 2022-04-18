@@ -1,18 +1,22 @@
-﻿using MySqlConnector;
-using System.Data;
+﻿using MySql.Data.MySqlClient;
 
 namespace Study.Infra.Data
 {
-    public class DbContext : IDisposable
+    public class DbContext : IAsyncDisposable
     {
-        public IDbConnection Connection { get; }
+        public MySqlConnection Connection { get; set; }
 
         public DbContext(IConfiguration configuration)
         {
             Connection = new MySqlConnection(configuration.GetConnectionString("mysqldb"));
             Connection.Open();
         }
-        public void Dispose() => Connection?.Dispose();
 
+        public async ValueTask DisposeAsync()
+        {
+            await Connection.CloseAsync();
+            await Connection.ClearAllPoolsAsync();
+            await Connection.DisposeAsync();
+        }
     }
 }

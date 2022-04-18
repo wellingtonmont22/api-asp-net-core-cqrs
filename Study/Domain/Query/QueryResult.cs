@@ -1,9 +1,8 @@
-﻿namespace Study.Commands.User
+﻿namespace Study.Query
 {
-    public class CreateUserResponse
+    public class QueryResult
     {
         public int Id { get; set; }
-
         public string Email { get; set; }
 
         public string Senha { get; set; }
