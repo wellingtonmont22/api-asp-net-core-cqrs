@@ -14,7 +14,7 @@ namespace Study.Controllers
             [FromServices] UserHandler handler
             )
         {
-            return Ok(handler.Handler(command));
+            return Ok(handler.HandlerAsync(command));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿namespace Study.Commands.User
+﻿
+namespace Study.Commands.User
 {
     public class CreateUserRequest
     {
@@ -6,9 +7,6 @@
 
         public string Senha { get; set; }
 
-        public void IsValid()
-        {
-
-        }
+  
     }
 }
