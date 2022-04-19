@@ -6,10 +6,10 @@ using Study.Infra.Repositories;
 namespace Study.Controllers
 {
     [ApiController]
-    [Route("v1")]
+    [Route("v1/users")]
     public class UserController : ControllerBase
     {
-        [HttpGet("/user")]
+        [HttpGet]
         public async Task<IActionResult> GetAllAsync([FromServices] IUserRepository repository)
         {
             try
@@ -23,7 +23,7 @@ namespace Study.Controllers
             }
         }
 
-        [HttpGet("/user/{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetAsync([FromServices] IUserRepository repository, [FromRoute] int id)
         {
             try
@@ -37,7 +37,7 @@ namespace Study.Controllers
             }
         }
 
-        [HttpPost("/user")]
+        [HttpPost]
         public IActionResult PostAsync(
             [FromBody] CreateUserRequest command,
             [FromServices] UserHandler handler
@@ -54,23 +54,42 @@ namespace Study.Controllers
             }
         }
 
-        [HttpPut("/user/{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateAsync(
             [FromRoute] int id,
             [FromBody] UpdateUserRequest command,
             [FromServices] UserHandler handler
             )
         {
+            try
+            {
 
+                var result = await handler.Handler(command, id);
 
+                return Ok(result);
 
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-            var result = await handler.Handler(command, id);
+        }
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteAsync(
+            [FromRoute] int id,
+            [FromServices] UserHandler handler
+            )
+        {
+            try
+            {
+                var result = await handler.Handler(id);
 
-            return Ok(result);
-
-
-
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

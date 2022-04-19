@@ -83,7 +83,7 @@ namespace Study.Infra.Repositories
 
                 var result = await conn.ExecuteAsync(sql: query, param: new
                 {
-                    id = id
+                    @id = id
                 });
 
                 return result;

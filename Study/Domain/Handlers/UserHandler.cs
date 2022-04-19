@@ -89,15 +89,27 @@ namespace Study.Handlers
             };
         }
 
-        //public async Task<dynamic> Handler(int id)
-        //{
-        //    if(id == null)
-        //    {
-        //        return new { message = "Id não é valida." };
-        //    }
+        public async Task<dynamic> Handler(int id)
+        {
+            if (id == null)
+            {
+                return new { message = "Id não é valida." };
+            }
 
-        //    var result = await _repository.DeleteAsync();
-        //}
+            var result = await _repository.DeleteAsync(id);
+
+            if(result != 1)
+            {
+                return new
+                {
+                    message = "Usuáio não existe."
+                };
+            }
+            return new
+            {
+                message = "Usuário apagado com sucesso."
+            };
+        }
 
     }
 }

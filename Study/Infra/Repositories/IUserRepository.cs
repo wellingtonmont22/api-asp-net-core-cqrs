@@ -10,6 +10,7 @@ namespace Study.Infra.Repositories
         public Task<QueryResult> GetAsync(int id);
         public Task<int> CreateAsync(User user);
         public Task<int> UpdateAsync(User user);
-        
+
+        public Task<int> DeleteAsync(int id);
     }
 }
