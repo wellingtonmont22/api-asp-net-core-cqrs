@@ -24,8 +24,6 @@ namespace Study.Handlers
             User user = User.Create(request);
             
 
-            user.Validate();
-
             if (!user.IsValid)
             {
                 return user.Notifications;
@@ -46,7 +44,7 @@ namespace Study.Handlers
                 };
         }
 
-        public async Task<dynamic> Handler(UpdateUserRequest request, int id)
+        public async Task<dynamic> Handler(UpdateUserRequest request)
         {
             request.Validate();
 
@@ -54,7 +52,7 @@ namespace Study.Handlers
             {
                 return request.Notifications;
             }
-            var UserExists = await _repository.GetAsync(id);
+            var UserExists = await _repository.GetAsync(request.Id);
             if (UserExists == null)
             {
                 return new
@@ -63,10 +61,10 @@ namespace Study.Handlers
                 };
             }
 
-            User user = User.Update(request, id);
+            User user = User.Update(request);
             
 
-            user.Validate();
+            
 
             if (!user.IsValid)
             {

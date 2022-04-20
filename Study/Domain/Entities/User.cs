@@ -6,32 +6,36 @@ namespace Study.Entities
 {
     public class User: Notifiable<Notification>
     {
-        public int Id { get; set; }
+        public int Id { get; private set; }
 
-        public string Email { get; set; }
+        public string Email { get; private set; }
 
-        public string Senha { get; set; }
-
-        public User(CreateUserRequest request)
-        {
-            Email = request.Email;
-            Senha = request.Senha;
-        }
-        public User(UpdateUserRequest request, int id)
-        {
-            Email = request.Email;
-            Senha = request.Senha;
-            Id = id;
-        }
+        public string Senha { get; private set; }
 
         public static User Create(CreateUserRequest request)
         {
-            return new User(request);
+            var user = new User() { 
+                Email = request.Email,
+                Senha = request.Senha,
+            };
+
+            user.Validate();
+
+            return user;
         }
 
-        public static User Update(UpdateUserRequest request,int id)
+        public static User Update(UpdateUserRequest request)
         {
-            return new User(request, id);
+            var user = new User()
+            {
+                Id = request.Id,
+                Email = request.Email,
+                Senha=request.Senha,
+            };
+
+            user.Validate();
+
+            return user;
 
         }
 

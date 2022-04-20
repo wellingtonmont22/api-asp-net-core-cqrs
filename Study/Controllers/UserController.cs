@@ -64,7 +64,7 @@ namespace Study.Controllers
             try
             {
 
-                var result = await handler.Handler(command, id);
+                var result = await handler.Handler(command);
 
                 return Ok(result);
 
