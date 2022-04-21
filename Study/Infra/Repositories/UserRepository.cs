@@ -17,7 +17,7 @@ namespace Study.Infra.Repositories
 
         public async Task<List<QueryResult>> GetAllAsync()
         {
-            string query = @"SELECT * FROM user";
+            string query = @"SELECT Id, Email FROM user";
 
             using (var conn = _ctx.Connection)
             {
@@ -28,7 +28,7 @@ namespace Study.Infra.Repositories
         }
         public async Task<QueryResult> GetAsync(int id)
         {
-            string query = @"SELECT * FROM user WHERE Id=@id";
+            string query = @"SELECT Id, Email FROM user WHERE Id=@id";
 
             using (var conn = _ctx.Connection)
             {
