@@ -19,7 +19,7 @@ namespace Study.Infra.Repositories
         {
             string query = @"SELECT * FROM user";
 
-            using(var conn = _ctx.Connection)
+            using (var conn = _ctx.Connection)
             {
                 var result = (await conn.QueryAsync<QueryResult>(query)).ToList();
 
@@ -42,13 +42,14 @@ namespace Study.Infra.Repositories
         }
         public async Task<int> CreateAsync(User user)
         {
-            using(var conn = _ctx.Connection)
-            {
-                string query = @"INSERT INTO user(Email, Senha) VALUES (@Email, @Senha)";
+            string query = @"INSERT INTO user(Email, Senha) VALUES (@Email, @Senha)";
 
-                var parameters = new DynamicParameters();
-                parameters.Add("@Email", user.Email, DbType.String);
-                parameters.Add("@Senha", user.Senha, DbType.String);
+            var parameters = new DynamicParameters();
+            parameters.Add("@Email", user.Email, DbType.String);
+            parameters.Add("@Senha", user.Senha, DbType.String);
+
+            using (var conn = _ctx.Connection)
+            {
 
                 var result = await conn.ExecuteAsync(query, parameters);
 
@@ -59,16 +60,18 @@ namespace Study.Infra.Repositories
 
         public async Task<int> UpdateAsync(User user)
         {
+            string query = @"UPDATE user SET Email=@email, Senha=@senha WHERE Id=@id";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@email", user.Email);
+            parameters.Add("@senha", user.Senha);
+            parameters.Add("@id", user.Id);
+
             using (var conn = _ctx.Connection)
             {
-                string query = @"UPDATE user SET Email=@email, Senha=@senha WHERE Id=@id";
 
-                var parameters = new DynamicParameters();
-                parameters.Add("@email", user.Email);
-                parameters.Add("@senha", user.Senha);
-                parameters.Add("@id", user.Id);
 
-                var result = await conn.ExecuteAsync(sql: query,param:parameters);
+                var result = await conn.ExecuteAsync(sql: query, param: parameters);
 
                 return result;
 
@@ -77,9 +80,11 @@ namespace Study.Infra.Repositories
 
         public async Task<int> DeleteAsync(int id)
         {
+            string query = @"DELETE FROM user WHERE Id=@id";
+
             using (var conn = _ctx.Connection)
             {
-                string query = @"DELETE FROM user WHERE Id=@id";
+
 
                 var result = await conn.ExecuteAsync(sql: query, param: new
                 {
