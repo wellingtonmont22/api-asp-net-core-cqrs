@@ -3,7 +3,7 @@ using Flunt.Validations;
 
 namespace Study.Domain.Commands.User
 {
-    public class UpdateUserRequest: Notifiable<Notification>
+    public class UpdateUserRequest : Notifiable<Notification>
     {
         public int Id { get; set; }
         public string Email { get; set; }
@@ -15,11 +15,10 @@ namespace Study.Domain.Commands.User
             AddNotifications(new Contract<Notification>()
                 .Requires()
                 .IsNotNullOrEmpty(Id.ToString(), "Id")
-                .IsNotNullOrEmpty(Email, "Email")
-                .IsEmail(Email, "Email")
-                .IsNotNullOrEmpty(Senha, "Senha")
-                
-                );
+                .IsNotNullOrEmpty(Email, "Email", "O email não pode ser nulo ou vazio.")
+                .IsEmail(Email, "Email", "O email possui caracteres inválidos.")
+                .IsNotNullOrEmpty(Senha, "Senha", "A senha não pode ser nulo ou vazio.")
+            );
         }
     }
 }

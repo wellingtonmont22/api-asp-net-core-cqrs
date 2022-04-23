@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Study.Domain.Commands.CommandResult;
 using Study.Domain.Commands.User;
 using Study.Handlers;
 using Study.Infra.Repositories;
@@ -46,7 +47,8 @@ namespace Study.Controllers
             try
             {
                 var result = handler.Handler(command);
-                return Created("v1/user", result);
+
+                return result.Result.TypeCode != Code.Success ? BadRequest(result) : Created("v1/user", result);
             }
             catch (Exception ex)
             {
@@ -66,9 +68,11 @@ namespace Study.Controllers
 
                 var result = await handler.Handler(command);
 
-                return Ok(result);
+                
+                return result.TypeCode != Code.Success ? BadRequest(result) : Ok(result);
 
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }

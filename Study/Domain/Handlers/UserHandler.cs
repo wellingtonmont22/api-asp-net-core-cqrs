@@ -1,4 +1,5 @@
-﻿using Study.Domain.Commands.User;
+﻿using Study.Domain.Commands.CommandResult;
+using Study.Domain.Commands.User;
 using Study.Entities;
 using Study.Infra.Repositories;
 
@@ -11,80 +12,81 @@ namespace Study.Handlers
         {
             _repository = repository;
         }
-        public async Task<dynamic> Handler(CreateUserRequest request)
+        public async Task<UserCommandResult> Handler(CreateUserRequest request)
         {
-            
+
             request.Validate();
 
             if (!request.IsValid)
             {
-                return request.Notifications;
+                return UserCommandResult.IsFailure(
+                    "Algum dos campos é invalido!",
+                    request.Notifications
+                    );
             }
 
             User user = User.Create(request);
-            
+
 
             if (!user.IsValid)
             {
-                return user.Notifications;
+                return UserCommandResult.IsFailure(
+                    "Algum dos campos é invalido!",
+                    user.Notifications
+                    );
             }
 
             var created = await _repository.CreateAsync(user);
-
-            if(created != 1)
+            //TODO Como retornar Server Internal Erro?
+            if (created != 1)
             {
-                return new
-                {
-                    message = "Não foi possivel criar o usuário.",
-                };
+                return UserCommandResult.IsFailure("Não foi possivel gravar usuário.");
             }
 
-            return new {
-                    message = "Usuário criado com sucesso.",
-                };
+            return UserCommandResult.IsSuccess("Usuário criado com sucesso.", new
+            {
+                Email= user.Email,
+                Senha= "********"
+            });
         }
 
-        public async Task<dynamic> Handler(UpdateUserRequest request)
+        public async Task<UserCommandResult> Handler(UpdateUserRequest request)
         {
             request.Validate();
 
             if (!request.IsValid)
             {
-                return request.Notifications;
+                return UserCommandResult.IsFailure("Algum dos campos é invalido!", request.Notifications);
             }
             var UserExists = await _repository.GetAsync(request.Id);
             if (UserExists == null)
             {
-                return new
-                {
-                    message = "Usuário não existe!"
-                };
+                return UserCommandResult.IsFailure("Usuário não existe!");
             }
 
             User user = User.Update(request);
-            
 
-            
+
+
 
             if (!user.IsValid)
             {
-                return user.Notifications;
+                return UserCommandResult.IsFailure("Algum dos campos é invalido!", user.Notifications);
             }
 
             var updated = await _repository.UpdateAsync(user);
 
             if (updated != 1)
             {
-                return new
-                {
-                    message = "Não foi possivel atualizar o usuário.",
-                };
+                //TODO Como retornar Server Internal Erro?
+                return UserCommandResult.IsFailure("Não foi possivel gravar usuário.");
             }
 
-            return new
+            return UserCommandResult.IsSuccess("Usuário criado com sucesso.", new
             {
-                message = "Usuário atualizado com sucesso.",
-            };
+                Email= user.Email,
+                Senha= "********"
+            });
         }
 
         public async Task<dynamic> Handler(int id)
@@ -96,7 +98,7 @@ namespace Study.Handlers
 
             var result = await _repository.DeleteAsync(id);
 
-            if(result != 1)
+            if (result != 1)
             {
                 return new
                 {

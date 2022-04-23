@@ -43,11 +43,12 @@ namespace Study.Entities
         {
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsGreaterOrEqualsThan(Email, 10, "Email")
-                .IsLowerOrEqualsThan(Email, 255, "Email")
-                .IsGreaterOrEqualsThan(Senha, 8, "Senha")
-                .IsLowerOrEqualsThan(Senha, 255, "Senha")
-                .IsNotNullOrEmpty(Id.ToString(), "Id")
+                .IsNotNullOrEmpty(Id.ToString(), "Id", "O Id não pode ser nulo ou vazio.")
+                .IsGreaterOrEqualsThan(Email, 10, "Email", "O email deve conter mais de 10 caracteres.")
+                .IsLowerOrEqualsThan(Email, 255, "Email", "O email deve conter menos de 256 caracteres.")
+                .IsGreaterOrEqualsThan(Senha, 8, "Senha", "A senha deve conter mais de 8 caracteres.")
+                .IsLowerOrEqualsThan(Senha, 255, "Senha", "A senha deve conter menos de 256 caracteres.")
+                
 
              );
         }
