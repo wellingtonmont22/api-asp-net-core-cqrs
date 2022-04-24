@@ -25,7 +25,7 @@ namespace Study.Handlers
                     );
             }
 
-            User user = User.Create(request);
+            var user = User.Create(request);
 
 
             if (!user.IsValid)
@@ -64,7 +64,7 @@ namespace Study.Handlers
                 return UserCommandResult.IsFailure("Usuário não existe!");
             }
 
-            User user = User.Update(request);
+            var user = User.Update(request);
 
 
 
